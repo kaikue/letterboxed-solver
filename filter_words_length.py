@@ -1,7 +1,8 @@
-words_file = open("words_alpha.txt", "r")
-filtered_file = open("words_alpha_len3plus.txt", "w")
+words_file = open("wordlist.txt", "r")
+filtered_file = open("wordlist_filtered.txt", "w")
 for line in words_file:
-    if len(line.strip()) >= 3:
+    word = line.strip()
+    if len(word) >= 3 and word.isalpha():
         filtered_file.write(line)
 words_file.close()
 filtered_file.close()
