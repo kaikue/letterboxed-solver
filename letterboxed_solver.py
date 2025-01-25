@@ -1,26 +1,17 @@
-#at least 3 letters long
-#can reuse letters
-# consecutive letters not from same side
-# last letter of word = first letter of next word
-
-# use all letters
-# find fewest words
-#   find shortest words
-
 # input: 4 groups of 3 letters: WHI ESD LAK BNO (order doesn't matter)
-# construct trie (just once!)
+# construct trie
 # DFS
 # for each letter:
-#   for each letter on other sides (unused first?)
+#   for each letter on other sides:
 #       add that letter to used set
 #       if completes a word:
-#           if word was already played: return fail
-#           if all letters used: return success
+#           if word was already played: fail
+#           also fail if word hasn't used any new letters since the last time we started with that letter
+#           if all letters used: success
 #           else: recurse starting new word with that letter
 #           (keep going to next in case of subword e.g. COUNTER/COUNTERPART)
 #       if valid options with that letter added:
 #           recurse with that letter added
-#       else: return fail
 # look at all successes, select fewest words then shortest total words length
 
 dictionary = {}
@@ -77,14 +68,13 @@ def search(groups, solutions, solution, word, used, last_group_i, used_new_since
                             solutions.append(new_solution)
                             print("Found solution: " + str(new_solution))
                         else:
-                            if len(new_solution) < max and next_used_new_since_last_starting[group_i][letter_i]:
+                            if len(new_solution) < max and next_used_new_since_last_starting[group_i][letter_i]: #should this be checking first letter of word and not current letter?
                                 next_used_new_since_last_starting_2 = [x[:] for x in next_used_new_since_last_starting]
                                 next_used_new_since_last_starting_2[group_i][letter_i] = False
                                 #recurse starting new word with next letter
                                 search(groups, solutions, new_solution, letter, next_used, group_i, next_used_new_since_last_starting_2, dictionary[letter], max)
                 #recurse with next letter added
                 search(groups, solutions, solution, next_word, next_used, group_i, next_used_new_since_last_starting, next_subdict, max)
-                #print("search2", groups, solutions, solution, next_word, next_used, group_i, next_used_new_since_last_starting)
 
 
 def main():
